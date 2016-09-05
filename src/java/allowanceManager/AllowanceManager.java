@@ -5,6 +5,11 @@
  */
 package allowanceManager;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -30,7 +35,10 @@ public class AllowanceManager {
      */
     public AllowanceManager() {
     }
-
+    
+    private final String _host = "jdbc:mysql://localhost:3306/allowance_manager";
+    private final String _username = "root";
+    private final String _password = "";
     /**
      * Retrieves representation of an instance of allowanceManager.AllowanceManager
      * @return an instance of java.lang.String
@@ -41,8 +49,20 @@ public class AllowanceManager {
         //TODO return proper representation object
         //throw new UnsupportedOperationException();
         String response;
+        response = null;
         
-        response = "What's up?";
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AllowanceManager.class.getName()).log(Level.SEVERE, null, ex);
+            response = ex.toString();
+        }
+        try (Connection connection = DriverManager.getConnection(_host, _username, _password)) {
+            response = "Database connected";
+        } catch (SQLException e) {
+            //throw new IllegalStateException("Cannot connect the database!", e);
+            response = "Cannot connect to database" + e.toString();
+        }
         
         return response;
     }
