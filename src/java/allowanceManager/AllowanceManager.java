@@ -5,6 +5,7 @@
  */
 package allowanceManager;
 
+import BackendHelpers.DatabaseConnection;
 import allowanceManagerChild.Child;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -40,28 +41,6 @@ public class AllowanceManager {
     public AllowanceManager() {
     }
     
-    private final String _host = "jdbc:mysql://localhost:3306/allowance_manager";
-    private final String _username = "root";
-    private final String _password = "";
-    
-    private Connection GetDBConnection(){
-        
-        // Instantiates the jdbc driver and makes the connection to the local mySQL
-        // database provided the connection information
-        // TODO: Move the connection information to a configuration file
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AllowanceManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                
-        try (Connection conn = DriverManager.getConnection(_host, _username, _password)) {
-            return conn;
-        } catch (SQLException e) {
-            throw new IllegalStateException("Cannot connect the database!", e);
-        }
-    }
     /**
      * Retrieves representation of an instance of allowanceManager.AllowanceManager
      * @return an instance of java.lang.String
@@ -74,16 +53,9 @@ public class AllowanceManager {
         String response = "This should work";
         String query = "{ call ChildReturnAll() }";
         Child child = new Child();
-        
         ResultSet rs;
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AllowanceManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                
-        try (Connection conn = DriverManager.getConnection(_host, _username, _password)) {
+
+        try(Connection conn = DatabaseConnection.GetDBConnection()){
             CallableStatement stmt = conn.prepareCall(query);
             rs = stmt.executeQuery();
             while (rs.next()){
@@ -92,19 +64,9 @@ public class AllowanceManager {
                 child.setChildLastName(rs.getString("LastName"));
                 response = response + child.toString();
             }
-            
-            //response = child.toString(); //"Query executed without issue";
-            
-        } catch (SQLException e) {
-            throw new IllegalStateException("Cannot connect the damn database!", e);
+        }catch(SQLException e) {
+            response = e.toString();
         }
-//        try(Connection conn = GetDBConnection()){
-//            CallableStatement stmt = conn.prepareCall(query);
-//            rs = stmt.executeQuery();
-//            response = "Query executed without issue";
-//        }catch(SQLException e) {
-//            response = e.toString();
-//        }
         
         return response;
     }

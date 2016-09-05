@@ -21,22 +21,21 @@ public class DatabaseConnection {
     private static final String HOST = "jdbc:mysql://localhost:3306/allowance_manager";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
+    private static Connection sharedConnection;
     
     public static Connection GetDBConnection(){
         
         // Instantiates the jdbc driver and makes the connection to the local mySQL
         // database provided the connection information
         // TODO: Move the connection information to a configuration file
+        Connection connect = sharedConnection;
         
         try {
             Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AllowanceManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-                
-        try (Connection conn = DriverManager.getConnection(HOST, USERNAME, PASSWORD)) {
-            return conn;
-        } catch (SQLException e) {
+            connect = DriverManager.getConnection(HOST, USERNAME, PASSWORD);
+            sharedConnection = connect;
+            return connect;
+        } catch (Exception e) {
             throw new IllegalStateException("Cannot connect the database!", e);
         }
     }
