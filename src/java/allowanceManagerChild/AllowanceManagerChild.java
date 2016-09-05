@@ -5,8 +5,7 @@
  */
 package allowanceManagerChild;
 
-import BackendHelpers.DatabaseConnection;
-import java.sql.Connection;
+import java.util.Set;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -15,6 +14,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import com.google.gson.Gson;
+
 
 /**
  * REST Web Service
@@ -41,9 +42,13 @@ public class AllowanceManagerChild {
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
 
-        String response = "Get this!";
-        Connection conn = DatabaseConnection.GetDBConnection();
-        
+        String response = "";
+        Set<Child> children = Child.GetAllChildInfo();
+        for (Child child : children){
+            Gson gson = new Gson();
+            String json = gson.toJson(child);
+            response = response + json;
+        }
         return response;
     }
 

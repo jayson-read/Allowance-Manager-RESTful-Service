@@ -9,11 +9,10 @@ import BackendHelpers.DatabaseConnection;
 import allowanceManagerChild.Child;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.HashSet;
+import java.util.Set;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -52,17 +51,24 @@ public class AllowanceManager {
         //throw new UnsupportedOperationException();
         String response = "This should work";
         String query = "{ call ChildReturnAll() }";
-        Child child = new Child();
+        
         ResultSet rs;
+        Set <Child> children = new HashSet<>();
+        
 
         try(Connection conn = DatabaseConnection.GetDBConnection()){
             CallableStatement stmt = conn.prepareCall(query);
             rs = stmt.executeQuery();
             while (rs.next()){
+                Child child = new Child();
                 child.setChildID(rs.getInt("ChildID"));
                 child.setChildFirstName(rs.getString("FirstName"));
                 child.setChildLastName(rs.getString("LastName"));
-                response = response + child.toString();
+                child.setChildFullName(rs.getString("FullName"));
+                child.setChildBirthDate(rs.getDate("BirthDay"));
+                
+                children.add(child);
+                response = response + child.toString() + " " + Integer.toString(children.size());
             }
         }catch(SQLException e) {
             response = e.toString();
