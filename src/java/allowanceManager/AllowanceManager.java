@@ -90,9 +90,10 @@ public class AllowanceManager {
                 child.setChildID(rs.getInt("ChildID"));
                 child.setChildFirstName(rs.getString("FirstName"));
                 child.setChildLastName(rs.getString("LastName"));
+                response = response + child.toString();
             }
             
-            response = child.toString(); //"Query executed without issue";
+            //response = child.toString(); //"Query executed without issue";
             
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the damn database!", e);
