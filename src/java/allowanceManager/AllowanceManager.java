@@ -39,6 +39,25 @@ public class AllowanceManager {
     private final String _host = "jdbc:mysql://localhost:3306/allowance_manager";
     private final String _username = "root";
     private final String _password = "";
+    
+    private Connection GetDBConnection(){
+        
+        // Instantiates the jdbc driver and makes the connection to the local mySQL
+        // database provided the connection information
+        // TODO: Move the connection information to a configuration file
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(AllowanceManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        try (Connection conn = DriverManager.getConnection(_host, _username, _password)) {
+            return conn;
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect the database!", e);
+        }
+    }
     /**
      * Retrieves representation of an instance of allowanceManager.AllowanceManager
      * @return an instance of java.lang.String
@@ -49,20 +68,9 @@ public class AllowanceManager {
         //TODO return proper representation object
         //throw new UnsupportedOperationException();
         String response;
-        response = null;
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(AllowanceManager.class.getName()).log(Level.SEVERE, null, ex);
-            response = ex.toString();
-        }
-        try (Connection connection = DriverManager.getConnection(_host, _username, _password)) {
-            response = "Database connected";
-        } catch (SQLException e) {
-            //throw new IllegalStateException("Cannot connect the database!", e);
-            response = "Cannot connect to database" + e.toString();
-        }
+        response = "This should work";
+
+        Connection conn = GetDBConnection();
         
         return response;
     }
