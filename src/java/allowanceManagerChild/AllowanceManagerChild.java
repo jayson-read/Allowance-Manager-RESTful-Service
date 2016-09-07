@@ -15,6 +15,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import com.google.gson.Gson;
+import javax.ws.rs.PathParam;
 
 
 /**
@@ -34,10 +35,6 @@ public class AllowanceManagerChild {
     public AllowanceManagerChild() {
     }
 
-    /**
-     * Retrieves representation of an instance of allowanceManagerChild.AllowanceManagerChild
-     * @return an instance of java.lang.String
-     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
@@ -48,6 +45,26 @@ public class AllowanceManagerChild {
             Gson gson = new Gson();
             String json = gson.toJson(child);
             response = response + json;
+        }
+        return response;
+    }
+    
+    @GET
+    @Path("/{childID}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getJson(@PathParam("childID") int childID) {
+        String response = "";
+        try{
+            Set<Child> children = Child.GetChildInfo(childID);
+            //response = Integer.toString(children.size());
+            for (Child child : children){
+                Gson gson = new Gson();
+                String json = gson.toJson(child);
+                response = response + json;
+            }
+        }
+        catch(Exception e){
+            response = e.toString();
         }
         return response;
     }

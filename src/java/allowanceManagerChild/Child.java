@@ -38,20 +38,6 @@ public class Child{
     public Date getChildBirthDate(){return this.childBirthDate;}
     
     
-//    public String toString(Child child){
-//        //return String.format("first name:%s,last name:%s", childFirstName, childLastName);
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("************************************");
-//        sb.append("\nchildID: ").append(child.childID);
-//        sb.append("\nchildFirstName: ").append(child.childFirstName);
-//        sb.append("\nchildLastName: ").append(child.childLastName);
-//        sb.append("\nchildFullName: ").append(child.childFullName);
-//        sb.append("\nchildBirthDate:").append(child.childBirthDate);
-//        sb.append("\n************************************");
-//        
-//        return sb.toString();
-//    }
-    
     public static Set<Child> GetAllChildInfo(){
         String response = "";
         ResultSet rs;
@@ -73,6 +59,35 @@ public class Child{
             }
 
         }catch(SQLException e) {
+            e.toString();
+        }
+        return children;
+    }
+    
+    public static Set<Child> GetChildInfo(int childID){
+        String response = "";
+        ResultSet rs;
+        String query = "{ call ChildGet(?) }";
+        
+        Set <Child> children = new HashSet<>();
+        System.out.println("In child.java");
+        try(Connection conn = DatabaseConnection.GetDBConnection()){
+            CallableStatement stmt = conn.prepareCall(query);
+            stmt.setInt(1, childID);
+            
+            rs = stmt.executeQuery();
+            while (rs.next()){
+                Child child = new Child();
+                child.setChildID(rs.getInt("ChildID"));
+                child.setChildFirstName(rs.getString("FirstName"));
+                child.setChildLastName(rs.getString("LastName"));
+                child.setChildFullName(rs.getString("FullName"));
+                child.setChildBirthDate(rs.getDate("BirthDay"));
+                children.add(child);
+            }
+
+        }catch(SQLException e) {
+            
             e.toString();
         }
         return children;
