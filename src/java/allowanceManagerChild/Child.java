@@ -6,12 +6,14 @@
 package allowanceManagerChild;
 
 import BackendHelpers.DatabaseConnection;
+import com.google.gson.Gson;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -37,6 +39,18 @@ public class Child{
     public String getChildFullName(){return this.childFullName;}
     public Date getChildBirthDate(){return this.childBirthDate;}
     
+    public static String ReturnJSON(Set<?> children){ //, Child child){
+        String response = "";
+        Child child;
+        for (Iterator<?> it = children.iterator(); it.hasNext();) {
+            child = (Child) it.next();
+            Gson gson = new Gson();
+            String json = gson.toJson(child);
+            response = response + json;
+        }
+        
+        return response;
+    }
     
     public static Set<Child> GetAllChildInfo(){
         String response = "";
@@ -70,7 +84,6 @@ public class Child{
         String query = "{ call ChildGet(?) }";
         
         Set <Child> children = new HashSet<>();
-        System.out.println("In child.java");
         try(Connection conn = DatabaseConnection.GetDBConnection()){
             CallableStatement stmt = conn.prepareCall(query);
             stmt.setInt(1, childID);

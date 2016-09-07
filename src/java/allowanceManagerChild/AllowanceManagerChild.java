@@ -40,13 +40,13 @@ public class AllowanceManagerChild {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public String getJson() {
-
         String response = "";
-        Set<Child> children = Child.GetAllChildInfo();
-        for (Child child : children){
-            Gson gson = new Gson();
-            String json = gson.toJson(child);
-            response = response + json;
+        try{
+            Set<Child> children = Child.GetAllChildInfo();
+            response = Child.ReturnJSON(children);
+        }
+        catch(Exception e){
+            response = e.toString();
         }
         return response;
     }
@@ -58,11 +58,7 @@ public class AllowanceManagerChild {
         String response = "";
         try{
             Set<Child> children = Child.GetChildInfo(childID);
-            for (Child child : children){
-                Gson gson = new Gson();
-                String json = gson.toJson(child);
-                response = response + json;
-            }
+            response = Child.ReturnJSON(children);
         }
         catch(Exception e){
             response = e.toString();

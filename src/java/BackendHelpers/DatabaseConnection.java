@@ -17,17 +17,18 @@ public class DatabaseConnection {
     private static final String HOST = "jdbc:mysql://localhost:3306/allowance_manager";
     private static final String USERNAME = "root";
     private static final String PASSWORD = "";
+    private static final String DRIVER = "com.mysql.jdbc.Driver";
     private static Connection sharedConnection;
     
+
     public static Connection GetDBConnection(){
         
         // Instantiates the jdbc driver and makes the connection to the local mySQL
         // database provided the connection information
         // TODO: Move the connection information to a configuration file
-        Connection connect = sharedConnection;
-        
+        Connection connect;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(DRIVER);
             connect = DriverManager.getConnection(HOST, USERNAME, PASSWORD);
             sharedConnection = connect;
             return connect;
