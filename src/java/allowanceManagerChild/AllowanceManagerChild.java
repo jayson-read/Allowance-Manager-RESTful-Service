@@ -15,6 +15,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
 import com.google.gson.Gson;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.POST;
 import javax.ws.rs.PathParam;
 
 
@@ -56,7 +58,6 @@ public class AllowanceManagerChild {
         String response = "";
         try{
             Set<Child> children = Child.GetChildInfo(childID);
-            //response = Integer.toString(children.size());
             for (Child child : children){
                 Gson gson = new Gson();
                 String json = gson.toJson(child);
@@ -69,12 +70,22 @@ public class AllowanceManagerChild {
         return response;
     }
 
-    /**
-     * PUT method for updating or creating an instance of AllowanceManagerChild
-     * @param content representation for the resource
-     */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
+        
     }
+    
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void deleteJson(String content){
+        
+    }
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void postJson(String content){
+        
+    }
+    
 }
