@@ -30,6 +30,7 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(allowanceManager.AllowanceManager.class);
+        resources.add(allowanceManager.CORSFilter.class);
         resources.add(allowanceManagerChild.AllowanceManagerChild.class);
     }
     

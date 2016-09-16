@@ -42,12 +42,15 @@ public class Child{
     public static String ReturnJSON(Set<?> children){ //, Child child){
         String response = "";
         Child child;
-        for (Iterator<?> it = children.iterator(); it.hasNext();) {
-            child = (Child) it.next();
-            Gson gson = new Gson();
-            String json = gson.toJson(child);
-            response = response + json;
-        }
+        Gson gson = new Gson();
+        response = gson.toJson(children);
+        
+//        for (Iterator<?> it = children.iterator(); it.hasNext();) {
+//            child = (Child) it.next();
+//            Gson gson = new Gson();
+//            String json = gson.toJson(child);
+//            response = response + json;
+//        }
         
         return response;
     }

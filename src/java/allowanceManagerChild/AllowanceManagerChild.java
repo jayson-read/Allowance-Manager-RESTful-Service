@@ -48,6 +48,7 @@ public class AllowanceManagerChild {
         catch(Exception e){
             response = e.toString();
         }
+        System.out.println(response);
         return response;
     }
     
